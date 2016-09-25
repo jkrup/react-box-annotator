@@ -54,13 +54,51 @@ export default class BoxAnnotator extends Component {
     }
   }
 
+  convertCurrentRectToData(currentRect) {
+    const { offsetWidth: imageWidth, offsetHeight: imageHeight } = this.canvas;
+    const { x1, y1, width, height } = currentRect;
+    const rectStyleBorder = 4;
+    const dataRect = {};
+    if (width > 0) {
+      dataRect.x1 = (x1 / imageWidth);
+      dataRect.x2 = ((x1 + width) / imageWidth);
+    } else {
+      dataRect.x2 = ((x1 - rectStyleBorder) / imageWidth);
+      dataRect.x1 = ((x1 + width - rectStyleBorder) / imageWidth);
+    }
+    if (height > 0) {
+      dataRect.y1 = (y1 / imageHeight);
+      dataRect.y2 = ((y1 + height) / imageHeight);
+    } else {
+      dataRect.y2 = ((y1 - rectStyleBorder) / imageHeight);
+      dataRect.y1 = ((y1 + height - rectStyleBorder) / imageHeight);
+    }
+
+    return dataRect;
+  }
+
+  convertRectDataToUIRect(rect) {
+    const { offsetWidth: imageWidth, offsetHeight: imageHeight } = this.canvas;
+    const { x1, x2, y1, y2 } = rect;
+
+    const log =  {
+      x1: x1 * imageWidth,
+      width: (x2 - x1) * imageWidth,
+      y1: y1 * imageHeight,
+      height: (y2 - y1) * imageHeight,
+    };
+
+    return log;
+  }
+
   mouseupHandle() {
     if (this.state.mouseDown) {
+      const nextRect = this.convertCurrentRectToData(this.state.currentRect);
       this.setState({
         currentRect: null,
         rects: [
           ...this.state.rects,
-          this.state.currentRect,
+          nextRect,
         ],
         mouseDown: false,
       }, () => {
@@ -150,7 +188,7 @@ export default class BoxAnnotator extends Component {
 
     const renderRects = () => (
       this.state.rects.map((rect, i) => {
-        const style = this.rectToStyles(rect);
+        const style = this.rectToStyles(this.convertRectDataToUIRect(rect));
         return (
           <div key={i} style={style}>
             <button style={xStyle} onClick={() => { removeRect(i); }}>×</button>

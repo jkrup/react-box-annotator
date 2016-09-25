@@ -1,6 +1,6 @@
 {
   "name": "box-annotator",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Bounding box annotator",
   "homepage": "https://github.com/mazlix/react-box-annotator",
   "scripts": {
