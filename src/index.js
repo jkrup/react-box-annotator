@@ -1,3 +1,3 @@
-import BoxAnnotator from './BoxAnnotator.jsx';
+import BoxAnnotator from './BoxAnnotator';
 
 export default BoxAnnotator;
