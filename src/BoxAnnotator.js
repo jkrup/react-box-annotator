@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react';
 
-// App component - represents the whole app
 export default class BoxAnnotator extends Component {
   constructor(props) {
     super(props);
